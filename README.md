@@ -18,6 +18,15 @@ pip install -r requirements.txt
 - Clone this repo:
 ```bash
 git clone https://github.com/mats-granath/toric-RL-decoder.git
-cd toric-RL-decoder
 ```
+
+## How to use the simulator
+There are two example scripts
+- train_script.py
+- prediction_script.py
+
+The train script trains an agent to solve syndromes. All the hyperparameters related to the training are specified in the script. Moreover, an evaluation of the training run is stored in the data folder with a timestamp.
+
+The predict script uses a trained network and predicts given a specified amount of syndromes. The trained network can be loaded from the network folder.
+
 

@@ -26,7 +26,7 @@ Transition = namedtuple('Transition',
 
 
 class RL():
-    def __init__(self, Network=str, system_size=int, p_error=0.1, capacity=int, learning_rate=float,
+    def __init__(self, Network, system_size=int, p_error=0.1, capacity=int, learning_rate=float,
                 discount_factor=float, number_of_actions=3, terminate_sequence=50, device='cpu', replay_memory=str):
         # device
         self.device = device
@@ -45,7 +45,7 @@ class RL():
             self.memory = Replay_memory_uniform(capacity)
         # Network
         self.network_name = Network
-        self.network = self.select_network(Network)
+        self.network = Network
         if Network == 'ResNet18' or Network == 'ResNet34' or Network == 'ResNet50' or Network == 'ResNet101' or Network == 'ResNet152':
             self.policy_net = self.network()
         else:
@@ -57,62 +57,6 @@ class RL():
         # hyperparameters RL
         self.discount_factor = discount_factor
         self.number_of_actions = number_of_actions
-
-
-    def select_network(self, network):
-        if network == 'NN_0':
-            return NN_0
-        if network == 'NN_1':
-            return NN_1
-        if network == 'NN_2':
-            return NN_2
-        if network == 'NN_3':
-            return NN_3
-        if network == 'NN_4':
-            return NN_4
-        if network == 'NN_5':
-            return NN_5
-        if network == 'NN_6':
-            return NN_6
-        if network == 'NN_7':
-            return NN_7
-        if network == 'NN_8':
-            return NN_8
-        if network == 'NN_9':
-            return NN_9
-        if network == 'NN_10':
-            return NN_10
-        if network == 'NN_11':
-            return NN_11
-        if network == 'NN_12':
-            return NN_12
-        if network == 'NN_13':
-            return NN_13
-        if network == 'NN_14':
-            return NN_14
-        if network == 'NN_15':
-            return NN_15
-        if network == 'NN_16':
-            return NN_16 
-        if network == 'NN_17':
-            return NN_17 
-        if network == 'NN_18':
-            return NN_18
-        if network == 'NN_19':
-            return NN_19
-        if network == 'ResNet':
-            return ResNet
-        if network == 'ResNet18':
-            return ResNet18
-        if network == 'ResNet34':
-            return ResNet34
-        if network == 'ResNet50':
-            return ResNet50
-        if network == 'ResNet101':
-            return ResNet101
-        if network == 'ResNet152':
-            return ResNet152
-
 
     def save_network(self, PATH):
         torch.save(self.policy_net, PATH)

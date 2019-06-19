@@ -6,11 +6,14 @@ import _pickle as cPickle
 from RL import RL
 from toric_model import Toric_code
 
+from NN import *
+from ResNet import *
+
 ##########################################################################
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-NETWORK = 'NN_17'
+NETWORK = NN_17
 SYSTEM_SIZE = 5
 
 continue_training = False
@@ -44,7 +47,7 @@ if continue_training == True:
                                  
 rl.train_for_n_epochs(training_steps=50,
                     num_of_predictions=1,
-                    epochs=1,
+                    epochs=2,
                     target_update=10,
                     reward_definition=4,
                     optimizer='Adam',

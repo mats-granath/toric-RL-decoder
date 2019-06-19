@@ -18,7 +18,7 @@ from toric_model import Action
 from toric_model import Perspective
 from Replay_memory import Replay_memory_uniform, Replay_memory_prioritized
 # import networks 
-from NN import NN_0, NN_7, NN_8, NN_9, NN_12, NN_13, NN_17
+from NN import NN_0, NN_7, NN_8, NN_9, NN_11, NN_12, NN_13, NN_17
 from ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 
 Transition = namedtuple('Transition',

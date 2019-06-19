@@ -1,4 +1,7 @@
 # toric-RL-decoder
+
+![alt text](https://raw.githubusercontent.com/username/projectname/branch/path/to/img.png)
+
 Deep reinforcement learning decoder for the toric code
 
 ## Prerequisites 

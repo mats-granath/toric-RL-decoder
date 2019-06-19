@@ -1,8 +1,6 @@
 # toric-RL-decoder
 
-<p align="center">
 ![](toric_code_gif.gif)
-</p>
 
 Deep reinforcement learning decoder for the toric code
 

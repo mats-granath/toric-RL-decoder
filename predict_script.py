@@ -19,13 +19,14 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 system_size = 7
 network = ResNet18
 network = NN_17
+NETWORK_FILE_NAME = 'ResNet18_5'
+NETWORK_FILE_NAME = 'size_7_NN_17'
 
 rl = RL(Network=network,
+        Network_name=NETWORK_FILE_NAME,
         system_size=system_size,
         device=device)
 #######################################################################################################
-NETWORK_FILE_NAME = 'ResNet18_5'
-NETWORK_FILE_NAME = 'size_7_NN_17'
 
 prediction_list_p_error = [0.1]
 num_of_predictions = 1

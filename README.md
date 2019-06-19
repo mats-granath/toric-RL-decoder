@@ -45,6 +45,7 @@ File | Description
 `·   └── Toric_model.py` | Contains the class toric_code and functions that are relevant to manipulate the grid.
 `├── NN.py` | Contains different network architectures
 `├── README.md` | About the project.
-`├── entrypoint.sh` | Called inside the container to execute the simulation. Can also be used locally.
+`├── ResNet.py` | Contains different ResNet architectures
 `├── requirements.txt` | The Python libraries that will be installed. Only the libraries in this official repo will be available.
-`└── run.sh` | The only command you need. Builds and runs simulations in the Docker container.
+`├── train_script` | A script training an agent to solve the toric code.
+`└── prediction_script` | The trained agent solves syndromes.

@@ -3,8 +3,8 @@ import time
 import os
 import torch
 import _pickle as cPickle
-from RL import RL
-from toric_model import Toric_code
+from src.RL import RL
+from src.toric_model import Toric_code
 from NN import NN_0, NN_7, NN_8, NN_9, NN_11, NN_12, NN_13, NN_17
 from ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 

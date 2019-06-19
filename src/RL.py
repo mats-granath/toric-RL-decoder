@@ -411,7 +411,7 @@ class RL():
         target_value_definition=str, batch_size=32, replay_start_size=32, nbr_of_qubit_errors=0, train_on_failed_syndroms=False):
         
         data_all = []
-        data_all = np.zeros((1, 20))
+        data_all = np.zeros((1, 21))
 
         for i in range(epochs):
             self.train(training_steps=training_steps,
@@ -430,10 +430,10 @@ class RL():
                                                                                                                                                                         save_prediction=True)
 
             data_all = np.append(data_all, np.array([[self.system_size, self.network_name, i+1, self.replay_memory, self.device, self.learning_rate, target_update, optimizer,target_value_definition, reward_definition, 
-                self.discount_factor, training_steps * (i+1), mean_q_list[0], prediction_list_p_error[0], num_of_predictions, len(failed_syndroms)/2, error_corrected_list[0], ground_state_list[0], average_number_of_steps_list[0], self.p_error]]), axis=0)
+                self.discount_factor, training_steps * (i+1), mean_q_list[0], prediction_list_p_error[0], num_of_predictions, len(failed_syndroms)/2, error_corrected_list[0], ground_state_list[0], average_number_of_steps_list[0],failure_rate, self.p_error]]), axis=0)
             # save training settings in txt file 
             np.savetxt(directory_path + '/data_all.txt', data_all, 
-                header='system_size, network_name, epoch, replay_memory, device, learning_rate, target_update, optimizer, target_value_definition, reward_definition, discount_factor, total_training_steps, mean_q_list, prediction_list_p_error, number_of_predictions, number_of_failed_syndroms, error_corrected_list, ground_state_list, average_number_of_steps_list, p_error_train', delimiter=',', fmt="%s")
+                header='system_size, network_name, epoch, replay_memory, device, learning_rate, target_update, optimizer, target_value_definition, reward_definition, discount_factor, total_training_steps, mean_q_list, prediction_list_p_error, number_of_predictions, number_of_failed_syndroms, error_corrected_list, ground_state_list, average_number_of_steps_list, failure_rate, p_error_train', delimiter=',', fmt="%s")
             # save network
             step = (i + 1) * training_steps
             PATH = directory_path + '/network_epoch/size_{3}_{2}_epoch_{0}_memory_{8}_target_update_{5}_optimizer_{6}_reward_{7}_steps_{4}_q_{1}_discount_{9}_learning_rate_{10}.pt'.format(

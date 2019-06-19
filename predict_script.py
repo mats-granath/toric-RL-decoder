@@ -8,6 +8,7 @@ from src.toric_model import Toric_code
 from NN import NN_11, NN_17
 from ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 
+
 start = time.time()
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

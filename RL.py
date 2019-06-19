@@ -27,13 +27,13 @@ Transition = namedtuple('Transition',
 
 class RL():
     def __init__(self, Network, system_size=int, p_error=0.1, capacity=int, learning_rate=float,
-                discount_factor=float, number_of_actions=3, terminate_sequence=50, device='cpu', replay_memory=str):
+                discount_factor=float, number_of_actions=3, max_nbr_actions_per_episode=50, device='cpu', replay_memory='uniform'):
         # device
         self.device = device
         # Toric code
         self.toric = Toric_code(system_size)
         self.grid_shift = int(system_size/2)
-        self.terminate_sequence = terminate_sequence
+        self.max_nbr_actions_per_episode = max_nbr_actions_per_episode
         self.system_size = system_size
         self.p_error = p_error
         # Replay Memory
@@ -219,7 +219,7 @@ class RL():
                     self.toric.generate_n_random_errors(nbr_of_qubit_errors)
                 terminal_state = self.toric.terminal_state(self.toric.state)
             # solve one episode
-            while terminal_state == 1 and num_of_steps_per_episode < self.terminate_sequence and iteration < training_steps:
+            while terminal_state == 1 and num_of_steps_per_episode < self.max_nbr_actions_per_episode and iteration < training_steps:
                 num_of_steps_per_episode += 1
                 num_of_epsilon_steps += 1
                 steps_counter += 1

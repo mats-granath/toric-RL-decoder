@@ -33,7 +33,7 @@ The predict script uses a trained network and predicts given a specified amount 
 ## Structure of this repo
 
 File | Description
----- | -----
+----- | -----
 `├── data` | A directory that contains the evaluation data for each training or prediction run.
 `├── docs` | Documentation for the different classes and functions.
 `├── network` | Pretrained models for the grid sizes 5,7, and 9.

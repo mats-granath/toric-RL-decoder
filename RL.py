@@ -44,7 +44,7 @@ class RL():
         elif self.replay_memory == 'uniform':
             self.memory = Replay_memory_uniform(capacity)
         else:
-            raise ValueError('Invalid memory type, please use only proportioanal or uniform')
+            raise ValueError('Invalid memory type, please use only proportional or uniform')
         # Network
         self.network_name = Network
         self.network = Network

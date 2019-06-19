@@ -283,6 +283,6 @@ class Toric_code():
         
         #plt.title(title)
         plt.axis('equal')
-        plt.savefig('plots/graph_'+str(title)+'.pdf')
+        plt.savefig('plots/graph_'+str(title)+'.png')
         plt.close()
         

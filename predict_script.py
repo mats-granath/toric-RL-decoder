@@ -29,7 +29,7 @@ prediction_list_p_error = [0.1]
 num_of_predictions = 1
 
 print('Prediction')
-nbr_of_qubit_errors = int(system_size/2)+1
+nbr_of_qubit_errors = int(system_size/2)+2
 
 timestamp = time.strftime("%y_%m_%d__%H_%M_%S__")
 PATH = 'data/prediction__' +str(NETWORK) +'__'+  timestamp

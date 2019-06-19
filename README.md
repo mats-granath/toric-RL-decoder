@@ -1,7 +1,6 @@
 # toric-RL-decoder
 
-![alt text](toric_code_picture.png){:height="50%" width="50%"}
-
+![](toric_code_gif.gif)
 Deep reinforcement learning decoder for the toric code
 
 ## Prerequisites 

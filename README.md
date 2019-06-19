@@ -43,7 +43,7 @@ File | Description
 `·   ├── Replay_memory.py` | Contains classes for a replay memory with uniform and proportional sampling. 
 `·   ├── Sum_tree.py` | A binary tree data structure where the parent’s value is the sum of its children.
 `·   └── Toric_model.py` | Contains the class toric_code and functions that are relevant to manipulate the grid.
-`├── Dockerfile` | The definition for the Docker container on which the simulation executes.
+`├── NN.py` | Contains different network architectures
 `├── README.md` | About the project.
 `├── entrypoint.sh` | Called inside the container to execute the simulation. Can also be used locally.
 `├── requirements.txt` | The Python libraries that will be installed. Only the libraries in this official repo will be available.

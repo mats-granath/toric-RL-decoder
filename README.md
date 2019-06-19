@@ -2,8 +2,6 @@
 
 ![](src/toric_code_gif.gif)
 
-<iframe src="https://giphy.com/embed/S5h6wEu0LBE13X22s8" width="480" height="360" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/S5h6wEu0LBE13X22s8">via GIPHY</a></p>
-
 Deep reinforcement learning decoder for the toric code
 
 ## Prerequisites 

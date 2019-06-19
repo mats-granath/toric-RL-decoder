@@ -11,7 +11,6 @@ import heapq
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch import from_numpy
 # import from other files
 from .toric_model import Toric_code
 from .toric_model import Action
@@ -20,13 +19,11 @@ from .Replay_memory import Replay_memory_uniform, Replay_memory_prioritized
 # import networks 
 from NN import NN_11, NN_17
 from ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
-
-Transition = namedtuple('Transition',
-                        ['state', 'action', 'reward', 'next_state', 'terminal'])
+from .util import incremental_mean, convert_from_np_to_tensor, Transition
 
 
 class RL():
-    def __init__(self, Network, system_size=int, p_error=0.1, capacity=int, learning_rate=float,
+    def __init__(self, Network, Network_name, system_size=int, p_error=0.1, capacity=int, learning_rate=float,
                 discount_factor=float, number_of_actions=3, max_nbr_actions_per_episode=50, device='cpu', replay_memory='uniform'):
         # device
         self.device = device
@@ -46,7 +43,7 @@ class RL():
         else:
             raise ValueError('Invalid memory type, please use only proportional or uniform')
         # Network
-        self.network_name = Network
+        self.network_name = Network_name
         self.network = Network
         if Network == ResNet18 or Network == ResNet34 or Network == ResNet50 or Network == ResNet101 or Network == ResNet152:
             self.policy_net = self.network()
@@ -60,6 +57,7 @@ class RL():
         self.discount_factor = discount_factor
         self.number_of_actions = number_of_actions
 
+
     def save_network(self, PATH):
         torch.save(self.policy_net, PATH)
 
@@ -69,10 +67,6 @@ class RL():
         self.target_net = deepcopy(self.policy_net)
         self.policy_net = self.policy_net.to(self.device)
         self.target_net = self.target_net.to(self.device)
-
-
-    def incremental_mean(self, x, mu, N):
-        return mu + (x - mu) / (N)
 
 
     def experience_replay(self, criterion, optimizer, discount_factor, batch_size, clip_error_term, target_value_definition=str, reward_definition=3, reward_terminal=None):
@@ -90,9 +84,9 @@ class RL():
         batch_state = self.get_batch_input(mini_batch.state)
         batch_next_state = self.get_batch_input(mini_batch.next_state)
         # preprocess batch_terminal and batch reward
-        batch_terminal = self.convert_from_np_to_tensor(np.array(mini_batch.terminal)) 
+        batch_terminal = convert_from_np_to_tensor(np.array(mini_batch.terminal)) 
         batch_terminal = batch_terminal.to(self.device)
-        batch_reward = self.convert_from_np_to_tensor(np.array(mini_batch.reward))
+        batch_reward = convert_from_np_to_tensor(np.array(mini_batch.reward))
         batch_reward = batch_reward.to(self.device)
         # compute policy net output
         output = self.policy_net(batch_state)
@@ -113,7 +107,7 @@ class RL():
         optimizer.zero_grad()
         # for prioritized experience replay
         if self.replay_memory == 'proportional':
-            loss = self.convert_from_np_to_tensor(np.array(weights)) * loss.cpu()
+            loss = convert_from_np_to_tensor(np.array(weights)) * loss.cpu()
             priorities = loss
             priorities = np.absolute(priorities.detach().numpy())
             self.memory.priority_update(indices, priorities)
@@ -136,7 +130,7 @@ class RL():
                 perspectives = self.toric.generate_perspective(self.grid_shift, batch_next_state[i].cpu())
                 perspectives = Perspective(*zip(*perspectives))
                 perspectives = np.array(perspectives.perspective)
-                perspectives = self.convert_from_np_to_tensor(perspectives)
+                perspectives = convert_from_np_to_tensor(perspectives)
                 perspectives = perspectives.to(self.device)
                 # select greedy action 
                 with torch.no_grad():        
@@ -156,8 +150,8 @@ class RL():
                     batch_perspectives[i,:,:,:] = perspective
                     batch_actions[i] = col[0]
                     batch_network_output[i] = q_values_table[row[0], col[0]]
-        batch_network_output = self.convert_from_np_to_tensor(batch_network_output)
-        batch_perspectives = self.convert_from_np_to_tensor(batch_perspectives)
+        batch_network_output = convert_from_np_to_tensor(batch_network_output)
+        batch_perspectives = convert_from_np_to_tensor(batch_perspectives)
         return batch_network_output, batch_perspectives, batch_actions
 
 
@@ -173,15 +167,9 @@ class RL():
         return target_output
 
 
-    def convert_from_np_to_tensor(self, tensor):
-        tensor = from_numpy(tensor)
-        tensor = tensor.type('torch.Tensor')
-        return tensor
-
-
     def get_batch_input(self, state_batch):
         batch_input = np.stack(state_batch, axis=0)
-        batch_input = self.convert_from_np_to_tensor(batch_input)
+        batch_input = convert_from_np_to_tensor(batch_input)
         return batch_input.to(self.device)
 
 
@@ -277,7 +265,7 @@ class RL():
         # preprocess batch of perspectives and actions 
         perspectives = Perspective(*zip(*perspectives))
         batch_perspectives = np.array(perspectives.perspective)
-        batch_perspectives = self.convert_from_np_to_tensor(batch_perspectives)
+        batch_perspectives = convert_from_np_to_tensor(batch_perspectives)
         batch_perspectives = batch_perspectives.to(self.device)
         batch_position_actions = perspectives.position
         #choose action using epsilon greedy approach
@@ -295,7 +283,8 @@ class RL():
         else:
             random_perspective = random.randint(0, number_of_perspectives-1)
             random_action = random.randint(1, number_of_actions)
-            step = Action(batch_position_actions[random_perspective], random_action)   
+            step = Action(batch_position_actions[random_perspective], random_action)  
+
         return step
 
 
@@ -308,7 +297,7 @@ class RL():
         # preprocess batch of perspectives and actions 
         perspectives = Perspective(*zip(*perspectives))
         batch_perspectives = np.array(perspectives.perspective)
-        batch_perspectives = self.convert_from_np_to_tensor(batch_perspectives)
+        batch_perspectives = convert_from_np_to_tensor(batch_perspectives)
         batch_perspectives = batch_perspectives.to(self.device)
         batch_position_actions = perspectives.position
         # generate action value for different perspectives 
@@ -336,6 +325,7 @@ class RL():
             random_action = random.randint(1, number_of_actions)
             q_value = q_values_table[random_perspective, random_action-1]
             step = Action(batch_position_actions[random_perspective], random_action)
+
         return step, q_value
 
 
@@ -389,13 +379,13 @@ class RL():
                     self.toric.step(action)
                     self.toric.state = self.toric.next_state
                     terminal_state = self.toric.terminal_state(self.toric.state)
-                    mean_q_per_p_error = self.incremental_mean(q_value, mean_q_per_p_error, steps_counter)
+                    mean_q_per_p_error = incremental_mean(q_value, mean_q_per_p_error, steps_counter)
                     
                     if plot_one_episode == True and j == 0 and i == 0:
                         self.toric.plot_toric_code(self.toric.state, 'step_'+str(num_of_steps_per_episode))
 
                 # compute mean steps 
-                mean_steps_per_p_error = self.incremental_mean(num_of_steps_per_episode, mean_steps_per_p_error, j+1)
+                mean_steps_per_p_error = incremental_mean(num_of_steps_per_episode, mean_steps_per_p_error, j+1)
                 # save error corrected 
                 error_corrected[j] = self.toric.terminal_state(self.toric.state) # 0: error corrected # 1: error not corrected    
                 # update groundstate

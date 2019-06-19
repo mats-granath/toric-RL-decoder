@@ -24,8 +24,8 @@ rl = RL(Network=network,
         system_size=system_size,
         device=device)
 #######################################################################################################
-NETWORK = 'ResNet18_5'
-NETWORK = 'size_7_NN_17'
+NETWORK_FILE_NAME = 'ResNet18_5'
+NETWORK_FILE_NAME = 'size_7_NN_17'
 
 prediction_list_p_error = [0.1]
 num_of_predictions = 1
@@ -34,11 +34,11 @@ print('Prediction')
 nbr_of_qubit_errors = int(system_size/2)+2
 
 timestamp = time.strftime("%y_%m_%d__%H_%M_%S__")
-PATH = 'data/prediction__' +str(NETWORK) +'__'+  timestamp
+PATH = 'data/prediction__' +str(NETWORK_FILE_NAME) +'__'+  timestamp
 if not os.path.exists(PATH):
     os.makedirs(PATH)
 
-PATH2 = 'network/'+str(NETWORK)+'.pt'
+PATH2 = 'network/'+str(NETWORK_FILE_NAME)+'.pt'
 error_corrected_list, ground_state_list, average_number_of_steps_list, mean_q_list, failed_syndroms, ground_state_list, prediction_list_p_error, failure_rate = rl.prediction(
     num_of_predictions=num_of_predictions, 
     num_of_steps=75, 
@@ -59,7 +59,7 @@ blubb = time.strftime('%H, %M, %S')
 
 print(runtime, 'h runtime')
 
-data_all = np.array([[NETWORK, failure_rate, num_of_predictions, error_corrected_list[0], ground_state_list[0],average_number_of_steps_list[0], mean_q_list[0], len(failed_syndroms)/2, runtime]])
+data_all = np.array([[NETWORK_FILE_NAME, failure_rate, num_of_predictions, error_corrected_list[0], ground_state_list[0],average_number_of_steps_list[0], mean_q_list[0], len(failed_syndroms)/2, runtime]])
   
 # save training settings in txt file 
 np.savetxt(PATH + '/data_all.txt', data_all, header='network, failure_rate, error corrected, ground state conserved, average number of steps, mean q value, number of failed syndroms, runtime (h)', delimiter=',', fmt="%s")

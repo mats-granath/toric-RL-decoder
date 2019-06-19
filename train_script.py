@@ -21,12 +21,13 @@ continue_training = False
 NETWORK_FILE_NAME = 'size_7_NN_17'
 
 rl = RL(Network=NETWORK,
+        Network_name=NETWORK_FILE_NAME,
         system_size=SYSTEM_SIZE,
         p_error=0.1,
         capacity=20000, 
         learning_rate=0.00025,
         discount_factor=0.95,
-        max_nbr_actions_per_episode=75,
+        max_nbr_actions_per_episode=5,
         device=device,
         replay_memory='proportional')   # proportional  
                                         # uniform

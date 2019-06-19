@@ -2,9 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from random import uniform, randint
 from collections import namedtuple
-
-Action = namedtuple('Action', ['position', 'action'])
-Perspective = namedtuple('Perspective', ['perspective', 'position'])
+from .util import Action, Perspective
 
 
 class Toric_code():
@@ -196,6 +194,7 @@ class Toric_code():
         
         return perspectives
 
+
     def generate_memory_entry(self, action, reward, grid_shift):
         def shift_state(row, col):
             perspective = np.roll(self.state, grid_shift-row, axis=1)
@@ -217,6 +216,7 @@ class Toric_code():
             action = Action((1, grid_shift, grid_shift), add_operator)
         terminal = self.terminal_state(next_perspective)
         return perspective, action, reward, next_perspective, terminal 
+
 
     def plot_toric_code(self, state, title):
         x_error_qubits1 = np.where(self.qubit_matrix[0,:,:] == 1)

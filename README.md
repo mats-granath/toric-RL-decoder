@@ -1,6 +1,6 @@
 # toric-RL-decoder
 
-![alt text](toric_code_picture.pdf)
+![alt text](toric_code_picture.png)
 
 Deep reinforcement learning decoder for the toric code
 

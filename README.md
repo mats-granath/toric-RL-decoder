@@ -2,7 +2,7 @@
 
 ![](src/toric_code_gif.gif)
 
-Deep reinforcement learning decoder for the toric code
+Deep reinforcement learning decoder for the toric code in pytorch. 
 
 ## Prerequisites 
 - Python 3

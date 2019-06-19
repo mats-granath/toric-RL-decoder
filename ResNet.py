@@ -111,11 +111,3 @@ def ResNet101():
 
 def ResNet152():
     return ResNet(Bottleneck, [3,8,36,3])
-
-def test():
-    net = ResNet18()
-    #summary(net, (2, 5, 5))
-    y = net(torch.randn(1,2,5,5))
-    #print(y.size())
-
-#test()

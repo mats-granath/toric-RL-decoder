@@ -5,7 +5,7 @@ import torch
 import _pickle as cPickle
 from src.RL import RL
 from src.toric_model import Toric_code
-from NN import NN_0, NN_7, NN_8, NN_9, NN_11, NN_12, NN_13, NN_17
+from NN import NN_11, NN_17
 from ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 
 start = time.time()
@@ -16,14 +16,16 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # CHANGE NETWORK, SYSTEMSIZE
 
-system_size = 5
-network = NN_11
+system_size = 7
+#network = ResNet18
+network = NN_17
 
 rl = RL(Network=network,
         system_size=system_size,
         device=device)
 #######################################################################################################
-NETWORK = 'Size_5_NN_11'
+#NETWORK = 'ResNet18_5'
+NETWORK = 'size_7_NN_17'
 
 prediction_list_p_error = [0.1]
 num_of_predictions = 1
@@ -44,7 +46,7 @@ error_corrected_list, ground_state_list, average_number_of_steps_list, mean_q_li
     prediction_list_p_error=prediction_list_p_error,
     nbr_of_qubit_errors=nbr_of_qubit_errors,
     directory_path=PATH,
-    plot_one_episode=True)
+    plot_one_episode=False)
 
 print(error_corrected_list, 'error corrected')
 print(ground_state_list, 'ground state conserved')

@@ -6,7 +6,7 @@ import _pickle as cPickle
 from src.RL import RL
 from src.toric_model import Toric_code
 
-from NN import NN_0, NN_7, NN_8, NN_9, NN_11, NN_12, NN_13, NN_17
+from NN import NN_11, NN_17
 from ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 
 ##########################################################################
@@ -14,7 +14,7 @@ from ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 NETWORK = NN_17
-NETWORK = ResNet18
+#NETWORK = ResNet18
 SYSTEM_SIZE = 7
 
 continue_training = False

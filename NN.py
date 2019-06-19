@@ -19,7 +19,7 @@ def pad_circular(x, pad):
 
 class NN_0(nn.Module):
 
-    def __init__(self, system_size, dropout, number_of_actions, device):
+    def __init__(self, system_size, number_of_actions, device):
         super(NN_0, self).__init__()
         self.conv1 = nn.Conv2d(2, 128, kernel_size=3, stride=1, padding=1)
         self.conv2 = nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1)
@@ -40,7 +40,7 @@ class NN_0(nn.Module):
 
 class NN_7(nn.Module):
 
-    def __init__(self, system_size, dropout, number_of_actions, device):
+    def __init__(self, system_size, number_of_actions, device):
         super(NN_7, self).__init__()
         self.device = device
 
@@ -63,7 +63,7 @@ class NN_7(nn.Module):
 
 class NN_8(nn.Module):
 
-    def __init__(self, system_size, dropout, number_of_actions, device):
+    def __init__(self, system_size, number_of_actions, device):
         super(NN_8, self).__init__()
         self.device = device
 
@@ -87,7 +87,7 @@ class NN_8(nn.Module):
 
 class NN_9(nn.Module):
 
-    def __init__(self, system_size, dropout, number_of_actions, device):
+    def __init__(self, system_size, number_of_actions, device):
         super(NN_9, self).__init__()
         self.conv1 = nn.Conv2d(2, 256, kernel_size=3, stride=1)
         self.conv2 = nn.Conv2d(256, 128, kernel_size=3, stride=1, padding=1)
@@ -110,7 +110,7 @@ class NN_9(nn.Module):
 
 class NN_12(nn.Module):
 
-    def __init__(self, system_size, dropout, number_of_actions, device):
+    def __init__(self, system_size, number_of_actions, device):
         super(NN_12, self).__init__()
 
         self.conv1 = nn.Conv2d(2, 200, kernel_size=3, stride=1)
@@ -162,7 +162,7 @@ class NN_12(nn.Module):
 
 class NN_13(nn.Module):
 
-    def __init__(self, system_size, dropout, number_of_actions, device):
+    def __init__(self, system_size, number_of_actions, device):
         super(NN_13, self).__init__()
         self.conv1 = nn.Conv2d(2, 300, kernel_size=3, stride=1)
         self.conv2 = nn.Conv2d(300, 256, kernel_size=3, stride=1, padding=1)
@@ -185,54 +185,9 @@ class NN_13(nn.Module):
         return x
 
 
-class NN_14(nn.Module):
-
-    def __init__(self, system_size, dropout, number_of_actions, device):
-        super(NN_14, self).__init__()
-        self.dropout = nn.Dropout(p=dropout)
-        self.conv1 = nn.Conv2d(2, 128, kernel_size=3, stride=1)
-        self.conv2 = nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=1)
-        self.conv3 = nn.Conv2d(128, 120, kernel_size=3, stride=1, padding=1)
-        self.conv4 = nn.Conv2d(120, 111, kernel_size=3, stride=1, padding=1)
-        self.conv5 = nn.Conv2d(111, 104, kernel_size=3, stride=1, padding=1)
-        self.conv6 = nn.Conv2d(104, 103, kernel_size=3, stride=1, padding=1)
-        self.conv7 = nn.Conv2d(103, 90, kernel_size=3, stride=1, padding=1)
-        self.conv8 = nn.Conv2d(90, 80 , kernel_size=3, stride=1, padding=1)
-        self.conv9 = nn.Conv2d(80, 73 , kernel_size=3, stride=1, padding=1)
-        self.conv10 = nn.Conv2d(73, 71 , kernel_size=3, stride=1, padding=1)
-        self.conv11 = nn.Conv2d(71, 64, kernel_size=3, stride=1)
-        output_from_conv = conv_to_fully_connected(system_size, 3, 0, 1)
-        self.linear1 = nn.Linear(64*int(output_from_conv)**2, 512)
-        self.linear2 = nn.Linear(512, 256)
-        self.linear3 = nn.Linear(256, number_of_actions) # 0: x, 1: y, 3: z
-        self.device = device
-
-    def forward(self, x):
-        x = pad_circular(x, 1)
-        x = F.relu(self.conv1(x))
-        x = F.relu(self.conv2(x))
-        x = F.relu(self.conv3(x))
-        x = F.relu(self.conv4(x))
-        x = F.relu(self.conv5(x))
-        x = F.relu(self.conv6(x))
-        x = F.relu(self.conv7(x))
-        x = F.relu(self.conv8(x))
-        x = F.relu(self.conv9(x))
-        x = F.relu(self.conv10(x))
-        x = F.relu(self.conv11(x))
-
-        n_features = np.prod(x.size()[1:])
-        x = x.view(-1, n_features)
-        x = self.dropout(self.linear1(x))
-        x = self.dropout(self.linear2(x))
-        x = self.linear3(x)
-
-        return x
-
-
 class NN_17(nn.Module):
 
-    def __init__(self, system_size, dropout, number_of_actions, device):
+    def __init__(self, system_size, number_of_actions, device):
         super(NN_17, self).__init__()
         self.conv1 = nn.Conv2d(2, 256, kernel_size=3, stride=1)
         self.conv2 = nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1)
@@ -291,7 +246,7 @@ class NN_17(nn.Module):
 
 class NN_18(nn.Module):
 
-    def __init__(self, system_size, dropout, number_of_actions, device):
+    def __init__(self, system_size, number_of_actions, device):
         super(NN_18, self).__init__()
         self.conv1 = nn.Conv2d(2, 256, kernel_size=3, stride=1)
         self.conv2 = nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1)

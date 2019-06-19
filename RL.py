@@ -18,7 +18,7 @@ from toric_model import Action
 from toric_model import Perspective
 from Replay_memory import Replay_memory_uniform, Replay_memory_prioritized
 # import networks 
-from NN import NN_0, NN_7, NN_8, NN_9, NN_12, NN_13, NN_14, NN_17
+from NN import NN_0, NN_7, NN_8, NN_9, NN_12, NN_13, NN_17
 from ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 
 Transition = namedtuple('Transition',
@@ -48,10 +48,10 @@ class RL():
         # Network
         self.network_name = Network
         self.network = Network
-        if Network == 'ResNet18' or Network == 'ResNet34' or Network == 'ResNet50' or Network == 'ResNet101' or Network == 'ResNet152':
+        if Network == ResNet18 or Network == ResNet34 or Network == ResNet50 or Network == ResNet101 or Network == ResNet152:
             self.policy_net = self.network()
         else:
-            self.policy_net = self.network(system_size, 0, number_of_actions, device)
+            self.policy_net = self.network(system_size, number_of_actions, device)
         self.target_net = deepcopy(self.policy_net)
         self.policy_net = self.policy_net.to(self.device)
         self.target_net = self.target_net.to(self.device)

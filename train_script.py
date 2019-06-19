@@ -14,6 +14,7 @@ from ResNet import *
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 NETWORK = NN_17
+#NETWORK = ResNet18
 SYSTEM_SIZE = 5
 
 continue_training = False
@@ -33,7 +34,7 @@ rl = RL(Network=NETWORK,
 
 # generate folder structure 
 timestamp = time.strftime("%y_%m_%d__%H_%M_%S__")
-PATH = 'data/training__' +str(NETWORK) +'_'+str(SYSTEM_SIZE)+'__' + timestamp
+PATH = 'data/training__' +str(NETWORK_FILE_NAME) +'_'+str(SYSTEM_SIZE)+'__' + timestamp
 PATH_epoch = PATH + '/network_epoch'
 if not os.path.exists(PATH):
     os.makedirs(PATH)

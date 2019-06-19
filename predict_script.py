@@ -11,6 +11,9 @@ from RL import RL
 from toric_model import Toric_code
 import platform
 
+from NN import *
+from ResNet import *
+
 start = time.time()
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -20,7 +23,8 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # CHANGE NETWORK, SYSTEMSIZE
 
 system_size = 7
-network = 'NN_17'
+network = NN_17
+
 rl = RL(Network=network,
         system_size=system_size,
         device=device)

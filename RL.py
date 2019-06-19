@@ -1,25 +1,25 @@
-from torch import from_numpy
+# standard libraries
 import numpy as np
-import torch
-import torch.nn as nn
-import torch.optim as optim
-import time
-
 import random
+import time
 from collections import namedtuple, Counter
 import operator
 import os
 from copy import deepcopy
 import heapq
-
+# pytorch
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch import from_numpy
 # import from other files
 from toric_model import Toric_code
 from toric_model import Action
 from toric_model import Perspective
-
-from Replay_memory import *
-from NN import *
-from ResNet import *
+from Replay_memory import Replay_memory_uniform, Replay_memory_prioritized
+# import networks 
+from NN import NN_0, NN_7, NN_8, NN_9, NN_12, NN_13, NN_14, NN_17
+from ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 
 Transition = namedtuple('Transition',
                         ['state', 'action', 'reward', 'next_state', 'terminal'])

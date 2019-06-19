@@ -25,9 +25,9 @@ rl = RL(Network=NETWORK,
         capacity=20000, 
         learning_rate=0.00025,
         discount_factor=0.95,
-        terminate_sequence=75,
+        max_nbr_actions_per_episode=75,
         device=device,
-        replay_memory='proportional')   # proportional  
+        replay_memory='aproportional')   # proportional  
                                         # uniform
 
 

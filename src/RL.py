@@ -72,7 +72,7 @@ class RL():
         self.target_net = self.target_net.to(self.device)
 
 
-    def experience_replay(self, criterion, optimizer, discount_factor, batch_size, clip_error_term, target_value_definition=str, reward_definition=3, reward_terminal=None):
+    def experience_replay(self, criterion, optimizer, discount_factor, batch_size, clip_error_term, target_value_definition=str, reward_definition=3):
         self.policy_net.train()
         self.target_net.eval()
         # get transitions and unpack them to minibatch
@@ -95,7 +95,7 @@ class RL():
         output = self.policy_net(batch_state)
         output = output.gather(1, batch_actions.view(-1, 1)).squeeze(1)    
         # compute target network output 
-        target_output = self.get_target_network_output(batch_next_state, target_value_definition, batch_size, reward_definition, reward_terminal)
+        target_output = self.get_target_network_output(batch_next_state, target_value_definition, batch_size, reward_definition)
         target_output = target_output.to(self.device)
         y = batch_reward + (batch_terminal * discount_factor * target_output)
         # compute loss and update replay memory
@@ -117,7 +117,7 @@ class RL():
         return loss.mean()
 
 
-    def get_network_output_next_state(self, batch_next_state=float, batch_size=int, reward_definition=int, reward_terminal=None, network=str, action_index=None):
+    def get_network_output_next_state(self, batch_next_state=float, batch_size=int, reward_definition=int, network=str, action_index=None):
         self.target_net.eval()
         self.policy_net.eval()
         # init matrices
@@ -126,7 +126,6 @@ class RL():
         batch_actions = np.zeros(batch_size)
         for i in range(batch_size):
             if (batch_next_state[i].cpu().sum().item() == 0):
-                batch_network_output[i] = reward_terminal[reward_definition]
                 #print(self.reward_clippings[reward_definition-1])
                 batch_perspectives[i,:,:,:] = np.zeros(shape=(2, self.system_size, self.system_size))
             else:
@@ -158,13 +157,12 @@ class RL():
         return batch_network_output, batch_perspectives, batch_actions
 
 
-    def get_target_network_output(self, batch_next_state, target_value_definition, batch_size, reward_definition, reward_terminal):
+    def get_target_network_output(self, batch_next_state, target_value_definition, batch_size, reward_definition):
         with torch.no_grad():
             action_index = np.full(shape=(batch_size), fill_value=None)
             target_output,_,_ = self.get_network_output_next_state(batch_next_state=batch_next_state, 
                                                                         batch_size=batch_size, 
                                                                         reward_definition=reward_definition,
-                                                                        reward_terminal=reward_terminal,
                                                                         network='target_net',
                                                                         action_index=action_index)
         return target_output

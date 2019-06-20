@@ -23,8 +23,8 @@ from .util import incremental_mean, convert_from_np_to_tensor, Transition
 
 
 class RL():
-    def __init__(self, Network, Network_name, system_size=int, p_error=0.1, capacity=int, learning_rate=float,
-                discount_factor=float, number_of_actions=3, max_nbr_actions_per_episode=50, device='cpu', replay_memory='uniform'):
+    def __init__(self, Network, Network_name, system_size=int, p_error=0.1, replay_memory_capacity=int, learning_rate=0.00025,
+                discount_factor=0.95, number_of_actions=3, max_nbr_actions_per_episode=50, device='cpu', replay_memory='uniform'):
         # device
         self.device = device
         # Toric code
@@ -34,12 +34,12 @@ class RL():
         self.system_size = system_size
         self.p_error = p_error
         # Replay Memory
-        self.capacity = capacity
+        self.replay_memory_capacity = replay_memory_capacity
         self.replay_memory = replay_memory
         if self.replay_memory == 'proportional':
-            self.memory = Replay_memory_prioritized(capacity, 0.6) # alpha
+            self.memory = Replay_memory_prioritized(replay_memory_capacity, 0.6) # alpha
         elif self.replay_memory == 'uniform':
-            self.memory = Replay_memory_uniform(capacity)
+            self.memory = Replay_memory_uniform(replay_memory_capacity)
         else:
             raise ValueError('Invalid memory type, please use only proportional or uniform')
         # Network

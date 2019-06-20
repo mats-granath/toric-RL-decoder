@@ -28,7 +28,10 @@ class RL():
         # device
         self.device = device
         # Toric code
-        self.toric = Toric_code(system_size)
+        if system_size%2 > 0:
+            self.toric = Toric_code(system_size)
+        else:
+            raise ValueError('Invalid system_size, please use only odd system sizes.')
         self.grid_shift = int(system_size/2)
         self.max_nbr_actions_per_episode = max_nbr_actions_per_episode
         self.system_size = system_size
@@ -41,7 +44,7 @@ class RL():
         elif self.replay_memory == 'uniform':
             self.memory = Replay_memory_uniform(replay_memory_capacity)
         else:
-            raise ValueError('Invalid memory type, please use only proportional or uniform')
+            raise ValueError('Invalid memory type, please use only proportional or uniform.')
         # Network
         self.network_name = Network_name
         self.network = Network

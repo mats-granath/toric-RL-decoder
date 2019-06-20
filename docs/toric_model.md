@@ -15,7 +15,7 @@ This class includes all the functions to initialize, alter and display the toric
 - rule_table: covering the interaction of different pauli operators acting on the same qubit. 
 
 ## Perspectives approach
-To reduce the overal complexity of the problem for the agent we generate given a syndrome several perspectives centering a qubit adjacent to an excitation.
+To reduce the overal complexity of the problem for the agent we generate, given a syndrome, several perspectives centering a qubit adjacent to an excitation.
 
 ![](visual/perspective.png)
 

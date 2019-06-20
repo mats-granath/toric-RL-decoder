@@ -72,7 +72,7 @@ class RL():
         self.target_net = self.target_net.to(self.device)
 
 
-    def experience_replay(self, criterion, optimizer, discount_factor, batch_size, clip_error_term, target_value_definition=str, reward_definition=3):
+    def experience_replay(self, criterion, optimizer, batch_size):
         self.policy_net.train()
         self.target_net.eval()
         # get transitions and unpack them to minibatch
@@ -95,9 +95,9 @@ class RL():
         output = self.policy_net(batch_state)
         output = output.gather(1, batch_actions.view(-1, 1)).squeeze(1)    
         # compute target network output 
-        target_output = self.get_target_network_output(batch_next_state, target_value_definition, batch_size, reward_definition)
+        target_output = self.get_target_network_output(batch_next_state, batch_size)
         target_output = target_output.to(self.device)
-        y = batch_reward + (batch_terminal * discount_factor * target_output)
+        y = batch_reward + (batch_terminal * self.discount_factor * target_output)
         # compute loss and update replay memory
         loss = self.get_loss(criterion, optimizer, y, output, weights, indices)
         # backpropagate loss
@@ -117,7 +117,7 @@ class RL():
         return loss.mean()
 
 
-    def get_network_output_next_state(self, batch_next_state=float, batch_size=int, reward_definition=int, network=str, action_index=None):
+    def get_network_output_next_state(self, batch_next_state=float, batch_size=int, action_index=None):
         self.target_net.eval()
         self.policy_net.eval()
         # init matrices
@@ -126,7 +126,6 @@ class RL():
         batch_actions = np.zeros(batch_size)
         for i in range(batch_size):
             if (batch_next_state[i].cpu().sum().item() == 0):
-                #print(self.reward_clippings[reward_definition-1])
                 batch_perspectives[i,:,:,:] = np.zeros(shape=(2, self.system_size, self.system_size))
             else:
                 perspectives = self.toric.generate_perspective(self.grid_shift, batch_next_state[i].cpu())
@@ -136,10 +135,7 @@ class RL():
                 perspectives = perspectives.to(self.device)
                 # select greedy action 
                 with torch.no_grad():        
-                    if network == 'target_net':
-                        net_output = self.target_net(perspectives)
-                    elif network == 'policy_net':
-                        net_output = self.policy_net(perspectives)
+                    net_output = self.target_net(perspectives)
                     q_values_table = np.array(net_output.cpu())
                     row, col = np.where(q_values_table == np.max(q_values_table))
                     if action_index[i] == None:
@@ -157,13 +153,11 @@ class RL():
         return batch_network_output, batch_perspectives, batch_actions
 
 
-    def get_target_network_output(self, batch_next_state, target_value_definition, batch_size, reward_definition):
+    def get_target_network_output(self, batch_next_state, batch_size):
         with torch.no_grad():
             action_index = np.full(shape=(batch_size), fill_value=None)
             target_output,_,_ = self.get_network_output_next_state(batch_next_state=batch_next_state, 
                                                                         batch_size=batch_size, 
-                                                                        reward_definition=reward_definition,
-                                                                        network='target_net',
                                                                         action_index=action_index)
         return target_output
 
@@ -175,8 +169,8 @@ class RL():
 
 
     def train(self, training_steps=int, target_update=int, epsilon_start=1.0, num_of_epsilon_steps=10, 
-        epsilon_end=0.1, clip_error_term=100, reach_final_epsilon=0.5, optimizer=str, 
-        target_value_definition=str, batch_size=int, replay_start_size=int, nbr_of_qubit_errors=0):
+        epsilon_end=0.1, reach_final_epsilon=0.5, optimizer=str,
+        batch_size=int, replay_start_size=int, nbr_of_qubit_errors=0):
         # set network to train mode
         self.policy_net.train()
         # define criterion and optimizer
@@ -228,12 +222,9 @@ class RL():
                 # experience replay
                 if steps_counter > replay_start_size:
                     update_counter += 1
-                    self.experience_replay(criterion, 
-                                            optimizer, 
-                                            self.discount_factor,   
-                                            batch_size, 
-                                            clip_error_term,
-                                            target_value_definition=target_value_definition)
+                    self.experience_replay(criterion,
+                                            optimizer,
+                                            batch_size)
                 # set target_net to policy_net
                 if update_counter % target_update == 0:
                     self.target_net = deepcopy(self.policy_net)
@@ -407,12 +398,12 @@ class RL():
         return error_corrected_list, ground_state_list, average_number_of_steps_list, mean_q_list, failed_syndroms, ground_state_list, prediction_list_p_error, failure_rate
 
 
-    def train_for_n_epochs(self, training_steps=int, epochs=int, PATH=str, num_of_predictions=100, target_update=100, reward_definition=int, 
-        optimizer=str, save=True, directory_path='network', predict_directory_path = None,  prediction_list_p_error=[0.1], 
-        target_value_definition=str, batch_size=32, replay_start_size=32, nbr_of_qubit_errors=0, train_on_failed_syndroms=False):
+    def train_for_n_epochs(self, training_steps=int, epochs=int, PATH=str, num_of_predictions=100, target_update=100, 
+        optimizer=str, save=True, directory_path='network', predict_directory_path = None,  prediction_list_p_error=[0.1],
+        batch_size=32, replay_start_size=32, nbr_of_qubit_errors=0, train_on_failed_syndroms=False):
         
         data_all = []
-        data_all = np.zeros((1, 21))
+        data_all = np.zeros((1, 19))
 
         for i in range(epochs):
             self.train(training_steps=training_steps,
@@ -431,15 +422,15 @@ class RL():
                                                                                                                                                                         save_prediction=True,
                                                                                                                                                                         num_of_steps=50)
 
-            data_all = np.append(data_all, np.array([[self.system_size, self.network_name, i+1, self.replay_memory, self.device, self.learning_rate, target_update, optimizer,target_value_definition, reward_definition, 
+            data_all = np.append(data_all, np.array([[self.system_size, self.network_name, i+1, self.replay_memory, self.device, self.learning_rate, target_update, optimizer,
                 self.discount_factor, training_steps * (i+1), mean_q_list[0], prediction_list_p_error[0], num_of_predictions, len(failed_syndroms)/2, error_corrected_list[0], ground_state_list[0], average_number_of_steps_list[0],failure_rate, self.p_error]]), axis=0)
             # save training settings in txt file 
             np.savetxt(directory_path + '/data_all.txt', data_all, 
-                header='system_size, network_name, epoch, replay_memory, device, learning_rate, target_update, optimizer, target_value_definition, reward_definition, discount_factor, total_training_steps, mean_q_list, prediction_list_p_error, number_of_predictions, number_of_failed_syndroms, error_corrected_list, ground_state_list, average_number_of_steps_list, failure_rate, p_error_train', delimiter=',', fmt="%s")
+                header='system_size, network_name, epoch, replay_memory, device, learning_rate, target_update, optimizer, discount_factor, total_training_steps, mean_q_list, prediction_list_p_error, number_of_predictions, number_of_failed_syndroms, error_corrected_list, ground_state_list, average_number_of_steps_list, failure_rate, p_error_train', delimiter=',', fmt="%s")
             # save network
             step = (i + 1) * training_steps
-            PATH = directory_path + '/network_epoch/size_{3}_{2}_epoch_{0}_memory_{8}_target_update_{5}_optimizer_{6}_reward_{7}_steps_{4}_q_{1}_discount_{9}_learning_rate_{10}.pt'.format(
-                i+1, np.round(mean_q_list[0], 4), self.network_name, self.system_size, step, target_update, optimizer, reward_definition, self.replay_memory, self.discount_factor, self.learning_rate)
+            PATH = directory_path + '/network_epoch/size_{3}_{2}_epoch_{0}_memory_{7}_target_update_{5}_optimizer_{6}__steps_{4}_q_{1}_discount_{8}_learning_rate_{9}.pt'.format(
+                i+1, np.round(mean_q_list[0], 4), self.network_name, self.system_size, step, target_update, optimizer, self.replay_memory, self.discount_factor, self.learning_rate)
             self.save_network(PATH)
             
         return error_corrected_list

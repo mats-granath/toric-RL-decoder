@@ -46,25 +46,22 @@ if continue_training == True:
     print('continue training')
     PATH2 = 'network/'+str(NETWORK_FILE_NAME)+'.pt'
     rl.load_network(PATH2)
-                                 
+
 rl.train_for_n_epochs(training_steps=50,
                     num_of_predictions=1,
                     epochs=1,
                     target_update=10,
-                    reward_definition=4,
                     optimizer='Adam',
                     batch_size=1,
                     directory_path = PATH,
                     prediction_list_p_error=[0.1],
-                    replay_start_size=48)  
-                                                       
+                    replay_start_size=48)
 
 
 """ rl.train_for_n_epochs(training_steps=10000,
                             num_of_predictions=100,
                             epochs=100,
                             target_update=1000,
-                            reward_definition=4,
                             optimizer='Adam',
                             batch_size=32,
                             directory_path = PATH,

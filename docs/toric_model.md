@@ -26,4 +26,7 @@ To reduce the overal complexity of the problem for the agent we generate, given 
 - terminal_state(state): checks given the state whether there are excitations left. 
 - eval_ground_state(): given the qubit_matrix the function checks whether there are any non trivial loops that changed the logical qubit state. If ground state is true and terminal is 0, the error correction was successful.
 -step(action): executes an action on the toric code. Action is a named tuple defined in util.py. It includes the position of the qubit and the operator.
-
+-rotate_state(state): rotates a syndrome (90 degree counter clock wise)
+-generate_perspective(grid_shift, state): generate all perspectives and save them in the named tuple perspectives. It basically generates an observation
+-generate_memory_entry(action, reward, grid_shift): It generates a memory entry for the RL class. 
+-plot_toric_code(state, title): visual representation of the toric code (see gif)

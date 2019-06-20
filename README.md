@@ -1,6 +1,6 @@
 # toric-RL-decoder
 
-![](src/toric_code_gif.gif)
+![](docs/toric_code_gif.gif)
 
 Deep reinforcement learning decoder for the toric code in pytorch. 
 

@@ -398,7 +398,7 @@ class RL():
         return error_corrected_list, ground_state_list, average_number_of_steps_list, mean_q_list, failed_syndroms, ground_state_list, prediction_list_p_error, failure_rate
 
 
-    def train_for_n_epochs(self, training_steps=int, epochs=int, PATH=str, num_of_predictions=100, target_update=100, 
+    def train_for_n_epochs(self, training_steps=int, epochs=int, PATH=str, num_of_predictions=100,num_of_steps_prediction=50, target_update=100, 
         optimizer=str, save=True, directory_path='network', predict_directory_path = None,  prediction_list_p_error=[0.1],
         batch_size=32, replay_start_size=32, nbr_of_qubit_errors=0, train_on_failed_syndroms=False):
         
@@ -414,13 +414,12 @@ class RL():
                     nbr_of_qubit_errors=nbr_of_qubit_errors)
             print('training done, epoch: ', i+1)
             # evaluate network
-            
             error_corrected_list, ground_state_list, average_number_of_steps_list, mean_q_list, failed_syndroms, ground_state_list, prediction_list_p_error, failure_rate = self.prediction(num_of_predictions=num_of_predictions, 
                                                                                                                                                                         prediction_list_p_error=prediction_list_p_error, 
                                                                                                                                                                         nbr_of_qubit_errors=int(self.system_size/2)+1,
                                                                                                                                                                         directory_path=predict_directory_path,
                                                                                                                                                                         save_prediction=True,
-                                                                                                                                                                        num_of_steps=50)
+                                                                                                                                                                        num_of_steps=num_of_steps_prediction)
 
             data_all = np.append(data_all, np.array([[self.system_size, self.network_name, i+1, self.replay_memory, self.device, self.learning_rate, target_update, optimizer,
                 self.discount_factor, training_steps * (i+1), mean_q_list[0], prediction_list_p_error[0], num_of_predictions, len(failed_syndroms)/2, error_corrected_list[0], ground_state_list[0], average_number_of_steps_list[0],failure_rate, self.p_error]]), axis=0)

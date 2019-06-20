@@ -49,6 +49,7 @@ if continue_training == True:
 
 rl.train_for_n_epochs(training_steps=50,
                     num_of_predictions=1,
+                    num_of_steps_prediction=5,
                     epochs=1,
                     target_update=10,
                     optimizer='Adam',

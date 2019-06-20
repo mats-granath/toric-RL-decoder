@@ -11,7 +11,7 @@ class Toric_code():
         self.plaquette_matrix = np.zeros((self.system_size, self.system_size), dtype=int)   # dont use self.plaquette
         self.vertex_matrix = np.zeros((self.system_size, self.system_size), dtype=int)      # dont use self.vertex 
         self.qubit_matrix = np.zeros((2, self.system_size, self.system_size), dtype=int)
-        self.state = np.stack((self.vertex_matrix, self.plaquette_matrix,), axis=0)
+        self.current_state = np.stack((self.vertex_matrix, self.plaquette_matrix,), axis=0)
         self.next_state = np.stack((self.vertex_matrix, self.plaquette_matrix), axis=0)
         self.ground_state = True    # True: only trivial loops, 
                                     # False: non trivial loop 
@@ -19,20 +19,7 @@ class Toric_code():
                                                                                             # pauli_x = 1
                                                                                             # pauli_y = 2
                                                                                             # pauli_z = 3
-        
 
-    def step(self, action):
-        # uses as input np.array of form (qubit_matrix=int, row=int, col=int, add_operator=int)
-        qubit_matrix = action.position[0]
-        row = action.position[1]
-        col = action.position[2]
-        add_operator = action.action
-
-        old_operator = self.qubit_matrix[qubit_matrix, row, col]
-        new_operator = self.rule_table[int(old_operator), int(add_operator)]
-        self.qubit_matrix[qubit_matrix, row, col] = new_operator        
-        self.syndrom('next_state')
-    
 
     def generate_random_error(self, p_error):
         for i in range(2):
@@ -53,6 +40,20 @@ class Toric_code():
         np.random.shuffle(qubit_matrix_error)
         self.qubit_matrix[:,:,:] = qubit_matrix_error.reshape(2, self.system_size, self.system_size)
         self.syndrom('state')
+
+
+    def step(self, action):
+        # uses as input np.array of form (qubit_matrix=int, row=int, col=int, add_operator=int)
+        qubit_matrix = action.position[0]
+        row = action.position[1]
+        col = action.position[2]
+        add_operator = action.action
+
+        old_operator = self.qubit_matrix[qubit_matrix, row, col]
+        new_operator = self.rule_table[int(old_operator), int(add_operator)]
+        self.qubit_matrix[qubit_matrix, row, col] = new_operator        
+        self.syndrom('next_state')
+    
 
 
     def syndrom(self, state):
@@ -99,7 +100,7 @@ class Toric_code():
         plaquette_matrix = (flux == 1).astype(int)
 
         if state == 'state':
-            self.state = np.stack((vertex_matrix, plaquette_matrix), axis=0)
+            self.current_state = np.stack((vertex_matrix, plaquette_matrix), axis=0)
         elif state == 'next_state':
             self.next_state = np.stack((vertex_matrix, plaquette_matrix), axis=0)
 
@@ -197,7 +198,7 @@ class Toric_code():
 
     def generate_memory_entry(self, action, reward, grid_shift):
         def shift_state(row, col):
-            perspective = np.roll(self.state, grid_shift-row, axis=1)
+            perspective = np.roll(self.current_state, grid_shift-row, axis=1)
             perspective = np.roll(perspective, grid_shift-col, axis=2)
             next_perspective = np.roll(self.next_state, grid_shift-row, axis=1)
             next_perspective = np.roll(next_perspective, grid_shift-col, axis=2)

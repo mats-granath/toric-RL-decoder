@@ -205,7 +205,7 @@ class RL():
                     self.toric.generate_random_error(self.p_error)
                 else:
                     self.toric.generate_n_random_errors(nbr_of_qubit_errors)
-                terminal_state = self.toric.terminal_state(self.toric.state)
+                terminal_state = self.toric.terminal_state(self.toric.current_state)
             # solve one episode
             while terminal_state == 1 and num_of_steps_per_episode < self.max_nbr_actions_per_episode and iteration < training_steps:
                 num_of_steps_per_episode += 1
@@ -240,8 +240,8 @@ class RL():
                 if (update_counter % epsilon_update == 0):
                     epsilon = np.round(np.maximum(epsilon - epsilon_decay, epsilon_end), 3)
                 # set next_state to new state and update terminal state
-                self.toric.state = self.toric.next_state
-                terminal_state = self.toric.terminal_state(self.toric.state)
+                self.toric.current_state = self.toric.next_state
+                terminal_state = self.toric.terminal_state(self.toric.current_state)
 
 
     def get_reward(self):
@@ -249,7 +249,7 @@ class RL():
         if terminal == True:
             reward = 100
         else:
-            defects_state = np.sum(self.toric.state)
+            defects_state = np.sum(self.toric.current_state)
             defects_next_state = np.sum(self.toric.next_state)
             reward = defects_state - defects_next_state
 
@@ -260,7 +260,7 @@ class RL():
         # set network in evluation mode 
         self.policy_net.eval()
         # generate perspectives 
-        perspectives = self.toric.generate_perspective(grid_shift, self.toric.state)
+        perspectives = self.toric.generate_perspective(grid_shift, self.toric.current_state)
         number_of_perspectives = len(perspectives)
         # preprocess batch of perspectives and actions 
         perspectives = Perspective(*zip(*perspectives))
@@ -292,7 +292,7 @@ class RL():
         # set network in eval mode
         self.policy_net.eval()
         # generate perspectives
-        perspectives = self.toric.generate_perspective(grid_shift, self.toric.state)
+        perspectives = self.toric.generate_perspective(grid_shift, self.toric.current_state)
         number_of_perspectives = len(perspectives)
         # preprocess batch of perspectives and actions 
         perspectives = Perspective(*zip(*perspectives))
@@ -360,10 +360,10 @@ class RL():
                     self.toric.generate_random_error(p_error)
                 else:
                     self.toric.generate_n_random_errors(nbr_of_qubit_errors)
-                terminal_state = self.toric.terminal_state(self.toric.state)
+                terminal_state = self.toric.terminal_state(self.toric.current_state)
                 # plot one episode
                 if plot_one_episode == True and j == 0 and i == 0:
-                    self.toric.plot_toric_code(self.toric.state, 'initial_syndrom')
+                    self.toric.plot_toric_code(self.toric.current_state, 'initial_syndrom')
                 
                 init_qubit_state = deepcopy(self.toric.qubit_matrix)
                 # solve syndrome
@@ -377,17 +377,17 @@ class RL():
                                                                     prev_action=prev_action)
                     prev_action = action
                     self.toric.step(action)
-                    self.toric.state = self.toric.next_state
-                    terminal_state = self.toric.terminal_state(self.toric.state)
+                    self.toric.current_state = self.toric.next_state
+                    terminal_state = self.toric.terminal_state(self.toric.current_state)
                     mean_q_per_p_error = incremental_mean(q_value, mean_q_per_p_error, steps_counter)
                     
                     if plot_one_episode == True and j == 0 and i == 0:
-                        self.toric.plot_toric_code(self.toric.state, 'step_'+str(num_of_steps_per_episode))
+                        self.toric.plot_toric_code(self.toric.current_state, 'step_'+str(num_of_steps_per_episode))
 
                 # compute mean steps 
                 mean_steps_per_p_error = incremental_mean(num_of_steps_per_episode, mean_steps_per_p_error, j+1)
                 # save error corrected 
-                error_corrected[j] = self.toric.terminal_state(self.toric.state) # 0: error corrected # 1: error not corrected    
+                error_corrected[j] = self.toric.terminal_state(self.toric.current_state) # 0: error corrected # 1: error not corrected    
                 # update groundstate
                 self.toric.eval_ground_state()                                                          
                 ground_state[j] = self.toric.ground_state # False non trivial loops

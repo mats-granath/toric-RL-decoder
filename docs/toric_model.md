@@ -16,7 +16,7 @@ This class includes all the functions to initialize, alter and display the toric
 
 ## Perspectives approach
 To reduce the complexity of the problem, we used 
-![](visual/perspecitve.png)
+![](visual/perspective.png)
 
 
 ## Functions

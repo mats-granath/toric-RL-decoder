@@ -1,6 +1,6 @@
 # toric_model
 
-![](src/toric_code_gif.gif)
+![](toric_code_gif.gif)
 
 This class includes all the functions to initialize, alter and display the toric code.  
 

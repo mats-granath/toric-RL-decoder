@@ -16,6 +16,8 @@ This class includes all the functions to initialize, alter and display the toric
 
 ## Perspectives approach
 To reduce the complexity of the problem, we used 
+![](visual/perspecitve.png)
+
 
 ## Functions
 - generate_random_error(p_error): generate syndrome with equal probability of x,y and z errors given the error probability p_error.

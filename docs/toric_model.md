@@ -15,9 +15,9 @@ This class includes all the functions to initialize, alter and display the toric
 - rule_table: covering the interaction of different pauli operators acting on the same qubit. 
 
 ## Perspectives approach
-To reduce the complexity of the problem, we used 
-![](visual/perspective.png)
+To reduce the overal complexity of the problem for the agent we generate given a syndrome several perspectives centering a qubit adjacent to an excitation.
 
+![](visual/perspective.png)
 
 ## Functions
 - generate_random_error(p_error): generate syndrome with equal probability of x,y and z errors given the error probability p_error.

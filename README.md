@@ -9,7 +9,7 @@ Deep reinforcement learning decoder for the toric code in pytorch.
 
 ## Getting started 
 ### Installation 
-- The required libraries are matplotlib, numpy and pytorch (add all requirements!)
+- The required libraries are matplotlib, numpy and pytorch
 
 ```bash
 pip install -r requirements.txt

@@ -117,7 +117,7 @@ class RL():
         return loss.mean()
 
 
-    def get_network_output_next_state(self, batch_next_state=float, batch_size=int, network=str, action_index=None):
+    def get_network_output_next_state(self, batch_next_state=float, batch_size=int, action_index=None):
         self.target_net.eval()
         self.policy_net.eval()
         # init matrices
@@ -135,10 +135,7 @@ class RL():
                 perspectives = perspectives.to(self.device)
                 # select greedy action 
                 with torch.no_grad():        
-                    if network == 'target_net':
-                        net_output = self.target_net(perspectives)
-                    elif network == 'policy_net':
-                        net_output = self.policy_net(perspectives)
+                    net_output = self.target_net(perspectives)
                     q_values_table = np.array(net_output.cpu())
                     row, col = np.where(q_values_table == np.max(q_values_table))
                     if action_index[i] == None:
@@ -161,7 +158,6 @@ class RL():
             action_index = np.full(shape=(batch_size), fill_value=None)
             target_output,_,_ = self.get_network_output_next_state(batch_next_state=batch_next_state, 
                                                                         batch_size=batch_size, 
-                                                                        network='target_net',
                                                                         action_index=action_index)
         return target_output
 

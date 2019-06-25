@@ -21,8 +21,10 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 #   ResNet50
 #   ResNet101
 #   ResNet152
-
 NETWORK = NN_17
+
+# common system sizes are 3,5,7 and 9 
+# grid size must be odd! 
 SYSTEM_SIZE = 7
 
 # For continuing the training of an agent
@@ -58,7 +60,7 @@ if continue_training == True:
     PATH2 = 'network/'+str(NETWORK_FILE_NAME)+'.pt'
     rl.load_network(PATH2)
 
-# train for n epochs the agent
+# train for n epochs the agent (test parameters)
 rl.train_for_n_epochs(training_steps=50,
                     num_of_predictions=1,
                     num_of_steps_prediction=5,

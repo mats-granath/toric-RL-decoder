@@ -13,13 +13,24 @@ from ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+# valid network names: 
+#   NN_11
+#   NN_17
+#   ResNet18
+#   ResNet34
+#   ResNet50
+#   ResNet101
+#   ResNet152
+
 NETWORK = NN_17
-#NETWORK = ResNet18
 SYSTEM_SIZE = 7
 
+# For continuing the training of an agent
 continue_training = False
+# this file is stored in the network folder and contains the trained agent.  
 NETWORK_FILE_NAME = 'size_7_NN_17'
 
+# initialize RL class and training parameters 
 rl = RL(Network=NETWORK,
         Network_name=NETWORK_FILE_NAME,
         system_size=SYSTEM_SIZE,
@@ -41,12 +52,13 @@ if not os.path.exists(PATH):
     os.makedirs(PATH)
     os.makedirs(PATH_epoch)
 
-
+# load the network for continue training 
 if continue_training == True:
     print('continue training')
     PATH2 = 'network/'+str(NETWORK_FILE_NAME)+'.pt'
     rl.load_network(PATH2)
 
+# train for n epochs the agent
 rl.train_for_n_epochs(training_steps=50,
                     num_of_predictions=1,
                     num_of_steps_prediction=5,

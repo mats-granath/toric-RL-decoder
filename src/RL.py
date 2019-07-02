@@ -170,7 +170,7 @@ class RL():
 
     def train(self, training_steps=int, target_update=int, epsilon_start=1.0, num_of_epsilon_steps=10, 
         epsilon_end=0.1, reach_final_epsilon=0.5, optimizer=str,
-        batch_size=int, replay_start_size=int, nbr_of_qubit_errors=0):
+        batch_size=int, replay_start_size=int, minimum_nbr_of_qubit_errors=0):
         # set network to train mode
         self.policy_net.train()
         # define criterion and optimizer
@@ -196,10 +196,10 @@ class RL():
             terminal_state = 0
             # generate syndroms
             while terminal_state == 0:
-                if nbr_of_qubit_errors == 0:
+                if minimum_nbr_of_qubit_errors == 0:
                     self.toric.generate_random_error(self.p_error)
                 else:
-                    self.toric.generate_n_random_errors(nbr_of_qubit_errors)
+                    self.toric.generate_n_random_errors(minimum_nbr_of_qubit_errors)
                 terminal_state = self.toric.terminal_state(self.toric.current_state)
             # solve one episode
             while terminal_state == 1 and num_of_steps_per_episode < self.max_nbr_actions_per_episode and iteration < training_steps:
@@ -322,7 +322,7 @@ class RL():
 
 
     def prediction(self, num_of_predictions=1, epsilon=0.0, num_of_steps=50, PATH=None, plot_one_episode=False, 
-        show_network=False, show_plot=False, prediction_list_p_error=float, nbr_of_qubit_errors=0, print_Q_values=False, directory_path='network/', save_prediction=True):
+        show_network=False, show_plot=False, prediction_list_p_error=float, minimum_nbr_of_qubit_errors=0, print_Q_values=False, save_prediction=True):
         # load network for prediction and set eval mode 
         if PATH != None:
             self.load_network(PATH)
@@ -348,10 +348,10 @@ class RL():
                 # generate random syndrom
                 self.toric = Toric_code(self.system_size)
 
-                if nbr_of_qubit_errors == 0:
+                if minimum_nbr_of_qubit_errors == 0:
                     self.toric.generate_random_error(p_error)
                 else:
-                    self.toric.generate_n_random_errors(nbr_of_qubit_errors)
+                    self.toric.generate_n_random_errors(minimum_nbr_of_qubit_errors)
                 terminal_state = self.toric.terminal_state(self.toric.current_state)
                 # plot one episode
                 if plot_one_episode == True and j == 0 and i == 0:
@@ -399,8 +399,8 @@ class RL():
 
 
     def train_for_n_epochs(self, training_steps=int, epochs=int, num_of_predictions=100, num_of_steps_prediction=50, target_update=100, 
-        optimizer=str, save=True, directory_path='network', predict_directory_path = None,  prediction_list_p_error=[0.1],
-        batch_size=32, replay_start_size=32, nbr_of_qubit_errors=0, train_on_failed_syndroms=False):
+        optimizer=str, save=True, directory_path='network', prediction_list_p_error=[0.1],
+        batch_size=32, replay_start_size=32, minimum_nbr_of_qubit_errors=0):
         
         data_all = []
         data_all = np.zeros((1, 19))
@@ -411,13 +411,12 @@ class RL():
                     optimizer=optimizer,
                     batch_size=batch_size,
                     replay_start_size=replay_start_size,
-                    nbr_of_qubit_errors=nbr_of_qubit_errors)
+                    minimum_nbr_of_qubit_errors=minimum_nbr_of_qubit_errors)
             print('training done, epoch: ', i+1)
             # evaluate network
             error_corrected_list, ground_state_list, average_number_of_steps_list, mean_q_list, failed_syndroms, ground_state_list, prediction_list_p_error, failure_rate = self.prediction(num_of_predictions=num_of_predictions, 
                                                                                                                                                                         prediction_list_p_error=prediction_list_p_error, 
-                                                                                                                                                                        nbr_of_qubit_errors=int(self.system_size/2)+1,
-                                                                                                                                                                        directory_path=predict_directory_path,
+                                                                                                                                                                        minimum_nbr_of_qubit_errors=int(self.system_size/2)+1,
                                                                                                                                                                         save_prediction=True,
                                                                                                                                                                         num_of_steps=num_of_steps_prediction)
 

@@ -43,7 +43,7 @@ rl = RL(Network=network,
 # generate syndrome with error probability 0.1 
 prediction_list_p_error = [0.1]
 # generate syndrome with a fixed amount of errors 
-nbr_of_qubit_errors = int(system_size/2)+1 # minimum number of erorrs for logical qubit flip
+minimum_nbr_of_qubit_errors = int(system_size/2)+1 # minimum number of erorrs for logical qubit flip
 
 # Generate folder structure, all results are stored in the data folder 
 timestamp = time.strftime("%y_%m_%d__%H_%M_%S__")
@@ -59,8 +59,7 @@ error_corrected_list, ground_state_list, average_number_of_steps_list, mean_q_li
     num_of_steps=75, 
     PATH=PATH2, 
     prediction_list_p_error=prediction_list_p_error,
-    nbr_of_qubit_errors=nbr_of_qubit_errors,
-    directory_path=PATH,
+    minimum_nbr_of_qubit_errors=minimum_nbr_of_qubit_errors,
     plot_one_episode=False)
 
 # runtime of prediction

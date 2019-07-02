@@ -398,7 +398,7 @@ class RL():
         return error_corrected_list, ground_state_list, average_number_of_steps_list, mean_q_list, failed_syndroms, ground_state_list, prediction_list_p_error, failure_rate
 
 
-    def train_for_n_epochs(self, training_steps=int, epochs=int, PATH=str, num_of_predictions=100,num_of_steps_prediction=50, target_update=100, 
+    def train_for_n_epochs(self, training_steps=int, epochs=int, num_of_predictions=100, num_of_steps_prediction=50, target_update=100, 
         optimizer=str, save=True, directory_path='network', predict_directory_path = None,  prediction_list_p_error=[0.1],
         batch_size=32, replay_start_size=32, nbr_of_qubit_errors=0, train_on_failed_syndroms=False):
         

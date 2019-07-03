@@ -18,13 +18,15 @@
   Loads a already trained network from a given path defined in a string, PATH
 
 ## experience_replay
+  Performs the experience replay part of deep Q-learning.
 
 ## train
   A function used for training of the policy network.
   notable parameters:
-    training_steps: number of training iterations the algorithm takes
-    target_update: the frequency the target network is updated
-    minimum_nbr_of_qubit_errors: The minimum number of qubits error on random syndromes generated.
+    training_steps: number of training iterations the algorithm uses.
+    target_update: the frequency the target network is updated.
+    minimum_nbr_of_qubit_errors: the minimum number of qubits error on random syndromes generated.
+    optimizer: string describint which optimizer should be used, e.g. 'Adam' or 'RMSprop'.
 
 ## prediction
   Function used for evaluating the training of the network, the algorithm is tested on randomly generated syndromes.
@@ -41,5 +43,7 @@
     num_of_steps_prediction: maximum number of steps allowed on an syndrome before an episode is terminated.
     target_update: the frequency the target network is updated
     prediction_list_p_error: a list of the different error probabilities used for generating syndromes for evaluation.
+    minimum_nbr_of_qubit_errors: the minimum number of qubits error on random syndromes generated.
     replay_start_size: defines after how many training step the experience replay starts.
+    optimizer: string describint which optimizer should be used, e.g. 'Adam' or 'RMSprop'.
 

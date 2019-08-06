@@ -6,7 +6,7 @@ p = 1e-10
 #q = 3
 
 # toric code
-d = 7
+d = 9
 k = int(d/2) + 1
 n = 2 * d**2
 
@@ -19,8 +19,9 @@ fail_rate_theory_1_operator = 2 * d * comb(d,k) / comb(2*d**2, k)
 #print(fail_rate_theory_1_operator, 'fail rate theory alg and MWPM')
    
 # probability logical error RL 
-p_l_alg = d * (p/3)**k * ( 2 * comb(d,k) + k * comb(d, k-1))
 #print(p_l_alg, 'fail rate alg')
+#p_l_alg = d * (p/3)**k * ( 2 * comb(d,k) + k * comb(d, k-1))
+p_l_alg = 4 * d * (comb(d,k) * (p/3)**k + k * comb(d, k-1) * ((2/3)*p)**(k-1))
 
 # fail rate for three operators 
 fail_rate_theory_3_operators = 4 *d * ( comb(d,k) + k * comb(d, k-1)) / (comb(2*d**2, k) * k**3)

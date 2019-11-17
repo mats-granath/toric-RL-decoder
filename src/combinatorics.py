@@ -14,7 +14,6 @@ n = 2 * d**2
 # every possible combination of x,y and z in a line
 number_of_ways = 0 
 for n_y in range(k):
-    #number_of_ways += comb(k,n_y) * comb(d, k-n_y) * comb(d-k+n_y, n_y)
     number_of_ways += comb(d, n_y) * comb(d-n_y, k - n_y)
 
 
@@ -27,21 +26,15 @@ print(p_l_mwpm, 'p_l_mwpm')
 #print(fail_rate_theory_1_operator, 'fail rate theory alg and MWPM')
    
 # probability logical error RL 
-#print(p_l_alg, 'fail rate alg')
-#p_l_alg = d * (p/3)**k * ( 2 * comb(d,k) + k * comb(d, k-1))
-#p_l_alg = 4 * d * (comb(d,k) * (p/3)**k + k * (p/3) * comb(d, k-1) * ((1/3)*p)**(k-1))
 p_l_alg = 4 * d * ((1/3)*p)**k * (comb(d,k) + d * comb(d-1, k-1))
 print(p_l_alg, 'pl_alg')
 
 # fail rate for three operators 
-fail_rate_theory_3_operators = 4 *d * ( comb(d,k) + d * comb(d, k-1)) / (comb(2*d**2, k) * k**3)
+fail_rate_theory_3_operators = 4*d * (comb(d,k) + d * comb(d-1, k-1)) / (comb(2*d**2, k) * k**3)
 print(fail_rate_theory_3_operators, 'fail_rate_theory_3_operators')
 #print(1-fail_rate_theory_3_operators, 'success rate 3 operators alg')
 
 fail_rate_mwpm_3_operators = (2*2*d*number_of_ways) / (comb(2*d**2, k) * k**3)
 print(fail_rate_mwpm_3_operators, 'fail_rate_mwpm_3_operators')
 
-n_y = 1
 
-print(comb(d, n_y) * comb(d, k - n_y))
-print(comb(d, k))

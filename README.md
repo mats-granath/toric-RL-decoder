@@ -1,7 +1,5 @@
 # toric-RL-decoder
 
-![](docs/visual/toric_code_gif.gif)
-
 ![](docs/visual/error_correction.gif)
 
 

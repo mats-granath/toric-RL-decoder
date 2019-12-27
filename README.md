@@ -2,6 +2,9 @@
 
 ![](docs/visual/toric_code_gif.gif)
 
+![](docs/visual/error_correction.gif)
+
+
 Deep reinforcement learning decoder for the toric code in pytorch. 
 
 ## Prerequisites 

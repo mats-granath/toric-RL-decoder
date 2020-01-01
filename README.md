@@ -2,6 +2,10 @@
 
 Contains code for https://arxiv.org/abs/1912.12919
 
+Deep Q-learning decoder for depolarizing noise on the toric code
+
+David Fitzek, Mattias Eliasson, Anton Frisk Kockum, Mats Granath
+
 ![](docs/visual/error_correction.gif)
 
 

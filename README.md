@@ -1,6 +1,10 @@
 # toric-RL-decoder
 
+Contains code for https://arxiv.org/abs/1912.12919
+
 ![](docs/visual/error_correction.gif)
+
+
 
 
 Deep reinforcement learning decoder for the toric code in pytorch. 
